@@ -14,5 +14,5 @@ celery_app.conf.beat_schedule = {
         "schedule": crontab(minute=0, hour="*/2"),
     },
 }
-celery_app.conf.timezone = "Europe/Kyiv"
+celery_app.conf.timezone = settings.celery_app_timezone
 celery_app.autodiscover_tasks(["app"])

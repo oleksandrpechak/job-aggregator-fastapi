@@ -8,6 +8,7 @@ A FastAPI project that scrapes job listings and stores them in MongoDB.
 - Redis-backed Celery worker for background scraping tasks
 - `/docs` available for API exploration
 - Job scraping endpoint: `POST /scrape/dou`
+- docker-compose
 
 ## Requirements
 - Python 3.11

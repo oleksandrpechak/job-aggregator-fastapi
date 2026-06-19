@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     redis_port: int
     redis_db: int
     redis_url: str
+    celery_app_timezone: str
+    dou_source_name: str
+    dou_source_url: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

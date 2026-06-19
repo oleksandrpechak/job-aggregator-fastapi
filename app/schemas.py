@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional, List, Any
 from bson import ObjectId
