@@ -10,6 +10,8 @@ from pymongo.errors import DuplicateKeyError
 from app.redis_client import redis_client
 from app.utils import build_dedup_key
 from app.tasks import ingest_dou_jobs
+from fastapi import Depends
+from app.auth import get_api_key
 import logging
 
 
@@ -54,7 +56,7 @@ async def redis_health():
         status_code=status.HTTP_201_CREATED,
         response_model_by_alias=True
         )
-async def create_job(job: JobCreate):
+async def create_job(job: JobCreate, api_key: str = Depends(get_api_key)):
     new_job = job.model_dump(mode="json")
     new_job["dedup_key"] = build_dedup_key(job.source, str(job.link))
     new_job["scraped_at"] = datetime.now(timezone.utc)
@@ -99,7 +101,7 @@ async def show_job(id:str):
     response_model=JobModel,
     response_model_by_alias=True
 )
-async def update_job(id: str, job: JobUpdate):
+async def update_job(id: str, job: JobUpdate, api_key: str = Depends(get_api_key)):
     try:
         object_id = ObjectId(id)
     except InvalidId:
@@ -120,7 +122,7 @@ async def update_job(id: str, job: JobUpdate):
     return update_result
 
 @app.delete("/jobs/{id}", response_description="Delete a job", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_job(id: str):
+async def delete_job(id: str, api_key: str = Depends(get_api_key)):
     try:
         object_id = ObjectId(id)
     except InvalidId:
@@ -134,7 +136,9 @@ async def delete_job(id: str):
 
 
 @app.post("/scrape/dou")
-async def scrape_dou():
+async def scrape_dou(
+    api_key: str = Depends(get_api_key)
+    ):
     task = ingest_dou_jobs.delay()
 
     return {
