@@ -11,6 +11,15 @@ services:
   worker:
     build: .
     command: celery -A app.celery_app:celery_app worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  beat:
+    build: .
+    command: celery -A app.celery_app:celery_app beat --loglevel=info
+    volumes:
+      - .:/app
     depends_on:
       - redis
   redis:
