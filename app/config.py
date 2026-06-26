@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     dou_source_name: str
     dou_source_url: str
     api_key: str
+    discord_webhook: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urlencode
 import re
 from datetime import datetime, timezone
 
@@ -37,3 +37,14 @@ def parse_dou_date(raw: str) -> datetime | None:
     if candidate.date() > today.date():
         candidate = candidate.replace(year=today.year - 1)
     return candidate
+
+DOU_BASE_VACANCIES_URL = "https://jobs.dou.ua/vacancies/"
+
+def build_dou_category_url(category: str) -> str:
+    category = category.strip()
+
+    query = urlencode({
+        "category": category,
+    })
+
+    return f"{DOU_BASE_VACANCIES_URL}?{query}"
