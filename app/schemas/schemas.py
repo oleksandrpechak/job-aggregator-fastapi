@@ -88,3 +88,9 @@ class JobCollection(BaseModel):
     
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
+class ScraperConfigCreate(BaseModel):
+    name: str = Field(min_length=1)
+    source: str = Field(min_length=1)
+    url: HttpUrl
+    active: bool = True
+    schedule_hours: int = Field(default=2, gt=0)
